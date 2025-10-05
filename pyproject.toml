@@ -1,0 +1,39 @@
+[project]
+name = "temporal-bench"
+version = "1.0.0"
+description = "Temporal reasoning evaluation environment for LLMs"
+authors = [
+    {name = "Tarun Nagarajan", email = "tarun.greenville@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+
+dependencies = [
+    "verifiers>=0.1.0",
+    "datasets>=2.14.0",
+    "openai>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["temporal_bench"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
