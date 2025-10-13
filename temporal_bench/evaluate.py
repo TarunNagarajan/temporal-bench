@@ -1,7 +1,7 @@
 import argparse
 import os
 import json
-from Typing import Any, Dict, List
+from typing import Any, Dict, List
 
 def load_dataset(path: str, num_examples: int, seed: int) -> List[Dict[str, Any]] :
     """
@@ -35,14 +35,43 @@ def evaluate_model(
         "coherence_score": 0.0,
         "config": {
             "model_name": model_name,
-            "num_examples": len(dataset)
+            "num_examples": len(dataset),
             "use_llm_judge": use_llm_judge,
             "judge_model": judge_model,
             "use_counterfactuals": use_counterfactuals,
             },
         }
-
     return results
+
+def main():
+    parser = argparse.ArgumentParser(description="Temporal reasoning evaluation for LLMs.")
+
+    parser.add_argument("-m", "--model", type=str, default="gpt-4.1-mini")
+    parser.add_argument("--dataset_path", type=str, default="data")
+    parser.add_argument("--judge_model", type=str, default="gpt-4.1-mini")
+    parser.add_argument("--use_llm_judge", action="store_true")
+    parser.add_argument("-n", "--num_examples", type=int, default=32)
+    parser.add_argument("--use_counterfactuals", action="store_true")
+    parser.add_argument("--seed", type=int, default=42)
+
+    args = parser.parse_args()
+
+    dataset = load_dataset(args.dataset_path, args.num_examples, args.seed)
+
+    results = evaluate_model(
+        model_name=args.model,
+        dataset=dataset,
+        use_llm_judge=args.use_llm_judge,
+        judge_model=args.judge_model,
+        use_counterfactuals=args.use_counterfactuals,
+    )
+
+    print(json.dumps(results, indent=4))
+
+if __name__ == "__main__":
+    main()
+
+    
 
 
 
