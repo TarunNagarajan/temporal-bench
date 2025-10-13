@@ -1,0 +1,7 @@
+id: temporal-bench
+authors: 
+  - name: Tarun Nagarajan
+    email: tarun.greenville@gmail.com
+version: 1.0.0
+description: An evaluation environment for temporal and counterfactual reasoning in LLMs.
+tags:
