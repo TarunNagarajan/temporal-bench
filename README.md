@@ -15,7 +15,7 @@ This environment is available on the [Prime Intellect Environment's Repository](
 
 ### Citation
 If you use this environment, please cite:
-- TRAM Dataset: [TRAM: Temporal Reasoning About Events](https://arxiv.org/abs/2310.00835) by Yuqing Wang, Yun Zhao.
+- TRAM Paper: [TRAM: Benchmarking Temporal Reasoning for Large Language Models](https://arxiv.org/abs/2310.00835) by Yuqing Wang, Yun Zhao.
 - Hugging Face dataset: Warrieryes/TRAM-Temporal
 
 ### Datasets
@@ -26,14 +26,19 @@ If you use this environment, please cite:
 ### Task Types
 The TRAM dataset contains 38 different types of temporal reasoning tasks, organized into thematic categories. You can filter by specific task type or by category:
 
-#### Category-Based Filtering
-You can filter by broader categories such as:
-- `ambiguity_resolution_*` (e.g., `ambiguity_resolution_interpretation`, `ambiguity_resolution_shift_*`)
-- `arithmetic_*` (e.g., `arithmetic_date_computation`, `arithmetic_time_computation`, `arithmetic_hour_adjustment*`)
-- `causality_*` (e.g., `causality_cause`, `causality_effect`)
-- `duration_*` (e.g., `duration_commonsense`, `duration_computation`, `duration_direct_comparison`)
-- `frequency_*` (e.g., `frequency_commonsense`, `frequency_computation`, `frequency_comparison`)
-- `typical_time_*` (e.g., `typical_time_commonsense`, `typical_time_facts`, `typical_time_computation`)
+#### Category Table
+| Category | Task Types Available | Description |
+|----------|----------------------|-------------|
+| `ambiguity_resolution_*` | `ambiguity_resolution_interpretation`, `ambiguity_resolution_shift_calendar`, `ambiguity_resolution_shift_lt`, `ambiguity_resolution_shift_mt`, `ambiguity_resolution_shift_st` | Resolving ambiguous temporal expressions and references |
+| `arithmetic_*` | `arithmetic_application`, `arithmetic_date_computation`, `arithmetic_hour_adjustment(12h)`, `arithmetic_hour_adjustment (24h)`, `arithmetic_month_shift`, `arithmetic_time_computation`, `arithmetic_time_zone_conversion`, `arithmetic_week_identification`, `arithmetic_year_shift` | Tasks involving mathematical computations with temporal concepts |
+| `causality_*` | `causality_cause`, `causality_effect` | Identifying cause-and-effect relationships with temporal aspects |
+| `duration_*` | `duration_analogy_inference`, `duration_commonsense`, `duration_computation`, `duration_direct_comparison`, `duration_facts`, `duration_multi-step_comparison`, `duration_reading_comprehension` | Reasoning about lengths of time and duration concepts |
+| `frequency_*` | `frequency_application`, `frequency_commonsense`, `frequency_comparison`, `frequency_computation`, `frequency_facts`, `frequency_reading_comprehension` | Reasoning about how often events occur over time |
+| `nli` | `nli` | Natural Language Inference with temporal aspects |
+| `ordering_*` | `ordering_commonsense`, `ordering_facts` | Understanding sequence and temporal order of events |
+| `relation` | `relation` | Reasoning about temporal relations |
+| `storytelling` | `storytelling` | Temporal aspects in narrative contexts |
+| `typical_time_*` | `typical_time_comparsion`, `typical_time_commonsense`, `typical_time_facts`, `typical_time_reading_comprehension` | Understanding typical time durations and expectations |
 
 #### Individual Task Types
 
