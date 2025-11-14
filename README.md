@@ -117,13 +117,40 @@ Document any supported environment arguments and their meaning. Example:
 | `task_type` | str | `None` | Filter to specific task type (e.g., 'ambiguity_resolution_interpretation', 'arithmetic_date_computation', 'ordering_commonsense', etc.) or category (e.g., 'causality_*', 'arithmetic_*', 'ambiguity_resolution_*', etc.). Use '*' suffix to filter by category prefix. If None, uses all task types. |
 | `system_prompt` | str | `"Evaluate the sequence, duration, or timing of events in the given context. For multiple choice questions, respond with only the letter of the correct answer choice (such as 'A', 'B', 'C', etc.) with no additional text."` | System prompt to guide model behavior |
 
+### Quickstart
+Run an evaluation with default settings:
+
+```bash
+uv run vf-eval temporal-bench
+```
+
+Configure model and sampling:
+
+```bash
+uv run vf-eval temporal-bench -m gpt-4.1-mini -n 20 -r 3 -t 8192 -T 0.7 -a '{"dataset_split":"test"}'
+```
+
+For specific task filtering:
+
+```bash
+# Evaluate on specific task type
+uv run vf-eval temporal-bench -m gpt-4.1-mini -n 10 -a '{"task_type":"arithmetic_date_computation", "dataset_split":"test"}'
+
+# Evaluate on category of tasks (using wildcards)
+uv run vf-eval temporal-bench -m gpt-4.1-mini -n 10 -a '{"task_type":"causality_*", "dataset_split":"test"}'
+
+# Evaluate on all arithmetic-related tasks
+uv run vf-eval temporal-bench -m gpt-4.1-mini -n 10 -a '{"task_type":"arithmetic_*", "dataset_split":"test"}'
+```
+
+Notes:
+- Use `-a` / `--env-args` to pass environment-specific configuration as a JSON object.
+- The `task_type` parameter supports both specific task types and category wildcards (e.g., `causality_*`, `arithmetic_*`)
+
 ### Using the Environment for Evaluation
 To use this environment in your evaluations:
 1. Install the environment with: `prime env install runes/temporal-bench`
-2. Run evaluations with: `uv run vf-eval temporal-bench -m [your-model] -n [number-of-examples]`
-3. For specific task types: `uv run vf-eval temporal-bench -m [your-model] -n [number] -a '{"task_type":"arithmetic_date_computation"}'`
-4. For categories: `uv run vf-eval temporal-bench -m [your-model] -n [number] -a '{"task_type":"causality_*"}'` (uses all causality task types)
-5. For more details about the environment, visit: [https://app.primeintellect.ai/dashboard/environments/runes/temporal-bench](https://app.primeintellect.ai/dashboard/environments/runes/temporal-bench)
+2. For more details about the environment, visit: [https://app.primeintellect.ai/dashboard/environments/runes/temporal-bench](https://app.primeintellect.ai/dashboard/environments/runes/temporal-bench)
 
 ### Metrics
 
