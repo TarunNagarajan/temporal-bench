@@ -1,9 +1,15 @@
 # temporal-bench
 
+<img src="https://github.com/user-attachments/assets/40c36e38-c5bd-4c5a-9cb3-f7b902cd155d#gh-light-mode-only" alt="Prime Intellect" width="312">
+<img src="https://github.com/user-attachments/assets/6414bc9b-126b-41ca-9307-9e982430cde8#gh-dark-mode-only"  alt="Prime Intellect" width="312">
+
 ### Overview
 - **Environment ID**: `temporal-bench`
 - **Short description**: A temporal reasoning evaluation environment for LLMs, evaluating models on their ability to reason about time sequences, durations, and temporal relationships.
 - **Tags**: eval, reasoning, single-turn, temporal, temporal-bench
+
+### Find this environment on Prime Intellect
+This environment is available on the [Prime Intellect Environment's Repository](https://app.primeintellect.ai/dashboard/environments/runes/temporal-bench). Prime Intellect is building a community platform for crowdsourcing open environments, so anyone can contribute to open-source AGI research and evaluation.
 
 ### Citation
 If you use this environment, please cite:
