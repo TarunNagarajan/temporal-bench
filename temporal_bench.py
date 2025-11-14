@@ -78,7 +78,7 @@ def load_environment(
         return {
             "prompt": [{"role": "user", "content": input_text}],
             "answer": example["answer"],
-            "task": example["task"],  # Use the actual task type from the dataset
+            "task": example["task"],
         }
     
     dataset = dataset.map(process_input).select_columns(["prompt", "answer", "task"])
