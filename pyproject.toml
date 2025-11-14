@@ -1,27 +1,13 @@
 [project]
 name = "temporal-bench"
-version = "1.0.0"
-description = "Temporal reasoning evaluation environment for LLMs"
-authors = [
-    {name = "Tarun Nagarajan", email = "tarun.greenville@gmail.com"}
-]
-readme = "README.md"
+version = "0.1.0"
+description = "TRAM (Temporal Reasoning About Events) dataset evaluation environment for temporal reasoning tasks."
+tags = ["eval", "reasoning", "single-turn", "temporal", "temporal-bench"]
+license = "MIT"
 requires-python = ">=3.10"
-license = {text = "MIT"}
-
 dependencies = [
-    "verifiers>=0.2.0",
+    "verifiers>=0.1.7",
     "datasets>=2.19.0",
-    "openai>=1.23.0",
-    "anthropic>=0.21.3",
-]
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=7.0.0",
-    "pytest-asyncio>=0.21.0",
-    "black>=23.0.0",
-    "ruff>=0.1.0",
 ]
 
 [build-system]
@@ -29,12 +15,4 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build]
-include = ["evaluate.py"]
-
-[tool.ruff]
-line-length = 100
-target-version = "py311"
-
-[tool.black]
-line-length = 100
-target-version = ["py311"]
+include = ["temporal_bench.py"]

@@ -1,88 +1,66 @@
-# temporal-bench (Technical Details)
+# temporal-bench
 
-## Environment Functionality
+### Overview
+- **Environment ID**: `temporal-bench`
+- **Short description**: A temporal reasoning evaluation environment for LLMs, evaluating models on their ability to reason about time sequences, durations, and temporal relationships.
+- **Tags**: eval, reasoning, single-turn, temporal, temporal-bench
 
-- **Task Type:** Single-turn reasoning evaluation.
-- **Model receives a temporal reasoning prompt and must:**
-  1. Identify relationships between events.
-  2. Maintain or update a consistent timeline when given new facts.
-  3. (Optionally) Handle a counterfactual variant of the same prompt.
+### Citation
+If you use this environment, please cite:
+- TRAM Dataset: [TRAM: Temporal Reasoning About Events](https://arxiv.org/abs/2310.00835) by Yuqing Wang, Yun Zhao.
+- Hugging Face dataset: Warrieryes/TRAM-Temporal
 
-### Evaluation Flow
-| Step | Component | Description |
-| :--- | :--- | :--- |
-| 1 | Prompt Loader | Loads question (MCQ or SAQ) from subset. |
-| 2 | Model Response | LLM produces an answer (A/B/C/D or free text). |
-| 3 | Judge Selection | Chooses between programmatic judge or LLM judge. |
-| 4 | Scoring | Judge compares answer to gold or rubric, assigns weighted score. |
-| 5 | Reward Computation | Weighted sum of correctness, temporal coherence, and counterfactual consistency. |
+### Datasets
+- **Primary dataset(s)**: TRAM (Temporal Reasoning About Events) dataset loaded via the Hugging Face datasets library
+- **Source links**: [TRAM-Temporal dataset on Hugging Face](https://huggingface.co/datasets/Warrieryes/TRAM-Temporal)
+- **Split sizes**: Uses test split with 3,800 examples and train split with 59,691 examples
 
-## Judging System
+### Task Types
+The TRAM dataset contains various temporal reasoning tasks. You can filter by task type:
 
-**1. Programmatic Judge (default)**
-- **Used for:** MCQ questions.
-- **Scoring:** Binary or fractional accuracy.
-- **Advantage:** Deterministic, zero-cost.
+| Task Type | Description | Count |
+|-----------|-------------|-------|
+| ambiguity_resolution_interpretation | Resolving ambiguous temporal expressions | ~3,800 (test) / ~59,691 (train) |
 
-**2. LLM Judge (optional)**
-- **Used for:** SAQ or counterfactual updates.
-- **Model:** Configurable (e.g., `gpt-4.1-mini`, `gemini-1.5-flash`, or local API).
-- **Scoring rubric:**
-  - `temporal_order_correct` (0–1)
-  - `explanation_consistent` (0–1)
-  - `counterfactual_update_valid` (0–1)
-- **Reward:** Weighted mean (0–1).
+To select specific task types, use environment arguments as described below.
 
-## Metrics
+### Task
+- **Type**: single-turn
+- **Parser**: Custom `TemporalBenchParser` that extracts the final lettered answer (e.g., 'B') or formatted answer from the model's output using regex.
+- **Rubric overview**: The reward is calculated by an exact match reward function, which returns 1.0 for correct answers and 0.0 for incorrect ones.
 
-| Metric | Description |
-| :--- | :--- | :--- |
-| `reward` | Overall weighted score across criteria. |
-| `accuracy` | Fraction of correct answers (for MCQs). |
-| `criteria_results` | Per-example boolean vector of evaluation dimensions. |
-| `coherence_score` | (Optional) Evaluates internal consistency across multi-part prompts. |
-
-## Configuration Arguments
-
-| Arg | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `dataset_path` | `str` | Local TRAM subset path | Path to the curated subset CSVs |
-| `judge_model` | `str` | `"gpt-4.1-mini"` | Model used as LLM judge |
-| `use_llm_judge` | `bool` | `False` | Whether to use LLM judge instead of programmatic one |
-| `num_examples` | `int` | `32` | Number of examples to sample |
-| `use_counterfactuals` | `bool` | `True` | Whether to include counterfactual follow-up questions |
-| `seed` | `int` | `42` | For reproducibility |
-
-## Example Usage
+### Quickstart
+Run an evaluation with default settings:
 
 ```bash
-# Run evaluation on 10 examples using default settings
-uv run vf-eval temporal-bench -m "gpt-4.1-mini" -n 10 -r 5
-
-# Use custom judge and enable counterfactual reasoning
-uv run vf-eval temporal-bench -m "gemini-1.5-flash" --use_llm_judge --use_counterfactuals
+uv run vf-eval temporal-bench
 ```
 
-## Scoring Rubric Example (LLM Judge)
+Configure model and sampling:
 
-| Criterion | Weight | Description |
-| :--- | :--- | :--- |
-| `temporal_order_correct` | 0.5 | Correctness of event sequence understanding |
-| `duration_reasoning_correct` | 0.2 | Proper inference of time durations |
-| `counterfactual_consistency` | 0.2 | Coherence after hypothetical change |
-| `explanation_quality` | 0.1 | Clarity and internal reasoning validity |
+```bash
+uv run vf-eval temporal-bench -m gpt-4.1-mini -n 20 -r 3 -t 8192 -T 0.7 -a '{"dataset_split":"test"}'
+```
 
-## Environment Convention (Prime Intellect)
+Notes:
+- Use `-a` / `--env-args` to pass environment-specific configuration as a JSON object.
 
-Following the Prime Intellect Environment Hub conventions:
+### Environment Arguments
+Document any supported environment arguments and their meaning. Example:
 
-- **Environment name:** `temporal-bench`
-- **Each environment must include:**
-  - Metadata YAML (`environment.yaml`)
-  - Dataset manifest (`dataset_manifest.json`)
-  - Evaluator script (`evaluate.py`)
-  - Readme (overview, task, config, rubric)
-- **Evaluation metrics must be standardized to:**
-  - `reward`
-  - `criteria_results`
-- **Judge API config:** optional, auto-reads from `OPENAI_API_KEY`, `GEMINI_API_KEY`, etc.
+| Arg | Type | Default | Description |
+| --- | ---- | ------- | ----------- |
+| `dataset_split` | str | `"test"` | Dataset split to use (train/test) |
+| `system_prompt` | str | `"Evaluate the sequence, duration, or timing of events in the given context. For multiple choice questions, respond with only the letter of the correct answer choice (such as 'A', 'B', 'C', etc.) with no additional text."` | System prompt to guide model behavior |
+
+### Using the Environment for Evaluation
+To use this environment in your evaluations:
+1. Install the environment with: `prime env install runes/temporal-bench`
+2. Run evaluations with: `uv run vf-eval temporal-bench -m [your-model] -n [number-of-examples]`
+3. For more details about the environment, visit: [https://app.primeintellect.ai/dashboard/environments/runes/temporal-bench](https://app.primeintellect.ai/dashboard/environments/runes/temporal-bench)
+
+### Metrics
+
+| Metric | Meaning |
+| ------ | ------- |
+| `reward` | Main scalar reward, 1.0 if the chosen answer is correct, else 0.0 |
